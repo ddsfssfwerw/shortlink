@@ -1,10 +1,12 @@
 package org.example.shortlink.admin.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.shortlink.admin.common.convention.result.Result;
 import org.example.shortlink.admin.common.convention.result.Results;
 import org.example.shortlink.admin.common.enums.UserErrorCodeEnum;
+import org.example.shortlink.admin.dto.resq.UserActualResqDTO;
 import org.example.shortlink.admin.dto.resq.UserResqDTO;
 import org.example.shortlink.admin.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +38,16 @@ public class UserController {
             return new Result<UserResqDTO>().setCode(UserErrorCodeEnum.USER_NULL.code()).setMessage(UserErrorCodeEnum.USER_NULL.message());
         }
         return Results.success(userByUsername);
+    }
 
+    /**
+     * 根据用户名查找用户无脱敏信息
+     * @param username
+     * @return
+     */
+    @GetMapping("/api/shortlink/v1/actual/user/{username}")
+    public Result<UserActualResqDTO> getActualUserByUsername(@PathVariable("username") String username) {
+        log.info("getUserByUsername(无脱敏信息) {}", username);
+        return Results.success(BeanUtil.toBean(userService.getUserByUsername(username), UserActualResqDTO.class));
     }
 }
