@@ -6,8 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.shortlink.admin.common.convention.result.Result;
 import org.example.shortlink.admin.common.convention.result.Results;
 import org.example.shortlink.admin.common.enums.UserErrorCodeEnum;
+import org.example.shortlink.admin.dto.req.UserLoginReqDTO;
 import org.example.shortlink.admin.dto.req.UserRegisterReqDTO;
+import org.example.shortlink.admin.dto.req.UserUpdateReqDTO;
 import org.example.shortlink.admin.dto.resq.UserActualResqDTO;
+import org.example.shortlink.admin.dto.resq.UserLoginResqDTO;
 import org.example.shortlink.admin.dto.resq.UserResqDTO;
 import org.example.shortlink.admin.service.UserService;
 import org.springframework.web.bind.annotation.*;
@@ -72,6 +75,40 @@ public class UserController {
         log.info("注册用户： {}", userRegisterReqDTO.getUsername());
         userService.register(userRegisterReqDTO);
         return Results.success();
+    }
 
+    /**
+     * 修改信息
+     * @param userUpdateReqDTO
+     * @return
+     */
+    @PutMapping("/api/short-link/v1/user")
+    public Result<Void> update(@RequestBody UserUpdateReqDTO userUpdateReqDTO){
+        log.info("修改用户信息： {}", userUpdateReqDTO.getUsername());
+        userService.update(userUpdateReqDTO);
+        return Results.success();
+    }
+
+    /**
+     * 登录
+     * @param userLoginReqDTO
+     * @return
+     */
+    @PostMapping("/api/short-link/v1/user/login")
+    public Result<UserLoginResqDTO> login(@RequestBody UserLoginReqDTO userLoginReqDTO){
+        log.info("登录： {}", userLoginReqDTO.getUsername());
+        UserLoginResqDTO userLoginResqDTO = userService.login(userLoginReqDTO);
+        return Results.success(userLoginResqDTO);
+    }
+
+    /**
+     * 检查用户是否登录
+     * @param token
+     * @return
+     */
+    @GetMapping("/api/short-link/v1/user/check-login")
+    public Result<Boolean> checkLogin(@RequestParam("username") String name,@RequestParam("token") String token) {
+        log.info("检查用户是否登录：{} {}", name,token);
+        return Results.success(userService.checkLogin(name,token));
     }
 }
