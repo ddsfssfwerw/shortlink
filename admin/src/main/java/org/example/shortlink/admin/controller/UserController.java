@@ -111,4 +111,17 @@ public class UserController {
         log.info("检查用户是否登录：{} {}", name,token);
         return Results.success(userService.checkLogin(name,token));
     }
+
+    /**
+     * 注销
+     * @param name
+     * @param token
+     * @return
+     */
+    @DeleteMapping("/api/short-link/v1/user/logout")
+    public Result<Void> logout(@RequestParam("username") String name,@RequestParam("token") String token){
+        log.info("注销： {}", name);
+        userService.logout(name,token);
+        return Results.success();
+    }
 }
