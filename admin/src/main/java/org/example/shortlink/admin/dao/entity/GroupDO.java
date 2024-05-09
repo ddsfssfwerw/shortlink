@@ -1,9 +1,11 @@
 package org.example.shortlink.admin.dao.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-
-import java.util.Date;
+import lombok.NoArgsConstructor;
+import org.example.shortlink.admin.common.database.BaseDO;
 
 /**
  * @author LLY
@@ -12,7 +14,10 @@ import java.util.Date;
  */
 @Data
 @TableName("t_group")
-public class GroupDO {
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class GroupDO extends BaseDO {
     /**
      * id
      */
@@ -32,20 +37,5 @@ public class GroupDO {
      * 创建分组用户
      */
     private String username;
-
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-
-    /**
-     * 修改时间
-     */
-    private Date updateTime;
-
-    /**
-     * 删除标识
-     */
-    private int delFlag;
 
 }
