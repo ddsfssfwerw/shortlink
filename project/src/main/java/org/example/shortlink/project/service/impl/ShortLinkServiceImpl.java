@@ -1,6 +1,8 @@
 package org.example.shortlink.project.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +14,7 @@ import org.example.shortlink.project.dto.resq.ShortLinkCreateResqDTO;
 import org.example.shortlink.project.service.ShortLinkService;
 import org.example.shortlink.project.toolkit.HashUtil;
 import org.redisson.api.RBloomFilter;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 /**
@@ -42,10 +45,14 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
         shortLinkDO.setFullShortUrl(fullShortUrl);
         try {
             baseMapper.insert(shortLinkDO);
-        } catch (Exception e) {
-            //TODO
-            log.warn("短链接：{} 重复入库",fullShortUrl);
-            throw new ServiceException("短链接生成重复");
+        } catch (DuplicateKeyException ex) {
+            LambdaQueryWrapper<ShortLinkDO> eq = Wrappers.lambdaQuery(ShortLinkDO.class)
+                    .eq(t -> shortLinkDO.getFullShortUrl(), fullShortUrl);
+            ShortLinkDO shortLinkDO1 = baseMapper.selectOne(eq);
+            if (shortLinkDO1 != null){
+                log.warn("短链接：{} 重复入库", fullShortUrl);
+                throw new ServiceException("短链接生成重复");
+            }
         }
         shortUriCreaterCachePenetrationBloomFilter.add(fullShortUrl);
         return ShortLinkCreateResqDTO.builder()
@@ -60,9 +67,10 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
         String shortUri;
         while (true){
             if (count > 10){
-                throw new ServiceException("短链接频繁生成，请稍后在试");
+                throw new ServiceException("短链接频繁生成，请稍后再试");
             }
             String originUrl = shortLinkCreateReqDTO.getOriginUrl();
+            originUrl += System.currentTimeMillis();
             shortUri = HashUtil.hashToBase62(originUrl);
             if (!shortUriCreaterCachePenetrationBloomFilter.contains(shortLinkCreateReqDTO.getDomain()+"/"+shortUri)){
                 break;
