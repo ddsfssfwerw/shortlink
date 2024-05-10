@@ -32,7 +32,7 @@ public class UserController {
      * @param username
      * @return
      */
-    @GetMapping("/api/short-link/v1/user/{username}")
+    @GetMapping("/api/short-link/admin/v1/user/{username}")
     public Result<UserResqDTO> getUserByUsername(@PathVariable("username") String username) {
         log.info("getUserByUsername {}", username);
         UserResqDTO userByUsername = userService.getUserByUsername(username);
@@ -47,7 +47,7 @@ public class UserController {
      * @param username
      * @return
      */
-    @GetMapping("/api/short-link/v1/actual/user/{username}")
+    @GetMapping("/api/short-link/admin/v1/actual/user/{username}")
     public Result<UserActualResqDTO> getActualUserByUsername(@PathVariable("username") String username) {
         log.info("getUserByUsername(无脱敏信息) {}", username);
         return Results.success(BeanUtil.toBean(userService.getUserByUsername(username), UserActualResqDTO.class));
@@ -58,7 +58,7 @@ public class UserController {
      * @param username
      * @return
      */
-    @GetMapping("/api/short-link/v1/user/has-username")
+    @GetMapping("/api/short-link/admin/v1/user/has-username")
     public Result<Boolean> hasUsername(@RequestParam("username") String username) {
         log.info("检查是否存在用户名：{}", username);
         //log.info("结果：{}", userService.hasUserName(username));
@@ -70,7 +70,7 @@ public class UserController {
      * @param userRegisterReqDTO
      * @return
      */
-    @PostMapping("/api/short-link/v1/user")
+    @PostMapping("/api/short-link/admin/v1/user")
     public Result<Void> register(@RequestBody UserRegisterReqDTO userRegisterReqDTO){
         log.info("注册用户： {}", userRegisterReqDTO.getUsername());
         userService.register(userRegisterReqDTO);
@@ -82,7 +82,7 @@ public class UserController {
      * @param userUpdateReqDTO
      * @return
      */
-    @PutMapping("/api/short-link/v1/user")
+    @PutMapping("/api/short-link/admin/v1/user")
     public Result<Void> update(@RequestBody UserUpdateReqDTO userUpdateReqDTO){
         log.info("修改用户信息： {}", userUpdateReqDTO.getUsername());
         userService.update(userUpdateReqDTO);
@@ -94,7 +94,7 @@ public class UserController {
      * @param userLoginReqDTO
      * @return
      */
-    @PostMapping("/api/short-link/v1/user/login")
+    @PostMapping("/api/short-link/admin/v1/user/login")
     public Result<UserLoginResqDTO> login(@RequestBody UserLoginReqDTO userLoginReqDTO){
         log.info("登录： {}", userLoginReqDTO.getUsername());
         UserLoginResqDTO userLoginResqDTO = userService.login(userLoginReqDTO);
@@ -106,7 +106,7 @@ public class UserController {
      * @param token
      * @return
      */
-    @GetMapping("/api/short-link/v1/user/check-login")
+    @GetMapping("/api/short-link/admin/v1/user/check-login")
     public Result<Boolean> checkLogin(@RequestParam("username") String name,@RequestParam("token") String token) {
         log.info("检查用户是否登录：{} {}", name,token);
         return Results.success(userService.checkLogin(name,token));
@@ -118,7 +118,7 @@ public class UserController {
      * @param token
      * @return
      */
-    @DeleteMapping("/api/short-link/v1/user/logout")
+    @DeleteMapping("/api/short-link/admin/v1/user/logout")
     public Result<Void> logout(@RequestParam("username") String name,@RequestParam("token") String token){
         log.info("注销： {}", name);
         userService.logout(name,token);

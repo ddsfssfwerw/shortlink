@@ -29,7 +29,7 @@ public class GroupController {
      * @param shortLinkGroupSaveReqDTO
      * @return
      */
-    @PostMapping("/api/short-link/v1/group")
+    @PostMapping("/api/short-link/admin/v1/group")
     public Result<Void> save(@RequestBody ShortLinkGroupSaveReqDTO shortLinkGroupSaveReqDTO) {
         log.info("新增分组： {}", shortLinkGroupSaveReqDTO.getName());
         groupServise.saveGroup(shortLinkGroupSaveReqDTO);
@@ -41,7 +41,7 @@ public class GroupController {
      * @param
      * @return
      */
-    @GetMapping("/api/short-link/v1/group")
+    @GetMapping("/api/short-link/admin/v1/group")
     public Result<List<ShortLinkGroupResqDTO>> listGroup() {
         List<ShortLinkGroupResqDTO> list =  groupServise.listGroup();
         log.info("查询分组结果： {}",list);
@@ -53,7 +53,7 @@ public class GroupController {
      * @param updateReqDTO
      * @return
      */
-    @PutMapping("/api/short-link/v1/group")
+    @PutMapping("/api/short-link/admin/v1/group")
     public Result<Void> updateGroup(@RequestBody ShortLinkGroupUpdateReqDTO updateReqDTO) {
         log.info("修改分组： {}", updateReqDTO.getName());
         groupServise.updateGroup(updateReqDTO);
@@ -66,7 +66,7 @@ public class GroupController {
      * @param gid
      * @return
      */
-    @DeleteMapping("/api/short-link/v1/group")
+    @DeleteMapping("/api/short-link/admin/v1/group")
     public Result<Void> deleteGroup(@RequestParam String gid ) {
         log.info("删除分组： {}", gid);
         groupServise.deleteGroup(gid);
@@ -78,7 +78,7 @@ public class GroupController {
      * @param shortLinkGroupSortReqDTO
      * @return
      */
-    @PostMapping("/api/short-link/v1/group/sort")
+    @PostMapping("/api/short-link/admin/v1/group/sort")
     public Result<Void> sortGroup(@RequestBody List<ShortLinkGroupSortReqDTO> shortLinkGroupSortReqDTO) {
         log.info("排序分组：");
         groupServise.sortGroup(shortLinkGroupSortReqDTO);
