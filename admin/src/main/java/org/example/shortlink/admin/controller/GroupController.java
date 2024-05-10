@@ -5,12 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.shortlink.admin.common.convention.result.Result;
 import org.example.shortlink.admin.common.convention.result.Results;
 import org.example.shortlink.admin.dto.req.ShortLinkGroupSaveReqDTO;
+import org.example.shortlink.admin.dto.req.ShortLinkGroupUpdateReqDTO;
 import org.example.shortlink.admin.dto.resq.ShortLinkGroupResqDTO;
 import org.example.shortlink.admin.service.GroupServise;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -47,5 +45,17 @@ public class GroupController {
         List<ShortLinkGroupResqDTO> list =  groupServise.listGroup();
         log.info("查询分组结果： {}",list);
         return Results.success(list);
+    }
+
+    /**
+     * 修改分组
+     * @param updateReqDTO
+     * @return
+     */
+    @PutMapping("/api/short-link/v1/group")
+    public Result<Void> updateGroup(@RequestBody ShortLinkGroupUpdateReqDTO updateReqDTO) {
+        log.info("修改分组： {}", updateReqDTO.getName());
+        groupServise.updateGroup(updateReqDTO);
+        return Results.success();
     }
 }

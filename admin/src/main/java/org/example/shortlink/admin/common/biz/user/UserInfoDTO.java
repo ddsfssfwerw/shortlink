@@ -5,6 +5,7 @@ package org.example.shortlink.admin.common.biz.user;
  * @className UserInfoDTO
  * @date 2024/5/9
  */
+import com.alibaba.fastjson2.annotation.JSONField;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +23,7 @@ public class UserInfoDTO {
     /**
      * 用户 ID
      */
+    @JSONField(name = "id")
     private String userId;
 
     /**
@@ -34,8 +36,4 @@ public class UserInfoDTO {
      */
     private String realName;
 
-    /**
-     * 用户 Token
-     */
-    private String token;
 }
