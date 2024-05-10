@@ -10,6 +10,7 @@ import org.example.shortlink.admin.common.biz.user.UserContext;
 import org.example.shortlink.admin.dao.entity.GroupDO;
 import org.example.shortlink.admin.dao.mapper.GroupMapper;
 import org.example.shortlink.admin.dto.req.ShortLinkGroupSaveReqDTO;
+import org.example.shortlink.admin.dto.req.ShortLinkGroupSortReqDTO;
 import org.example.shortlink.admin.dto.req.ShortLinkGroupUpdateReqDTO;
 import org.example.shortlink.admin.dto.resq.ShortLinkGroupResqDTO;
 import org.example.shortlink.admin.service.GroupServise;
@@ -56,7 +57,7 @@ public class GroupServiseImpl extends ServiceImpl<GroupMapper, GroupDO> implemen
         LambdaQueryWrapper<GroupDO> eq = Wrappers.lambdaQuery(GroupDO.class)
                 .eq(GroupDO::getDelFlag, 0)
                 .eq(GroupDO::getUsername, UserContext.getUsername())
-                .orderByAsc(GroupDO::getSortOrder,GroupDO::getUpdateTime);
+                .orderByDesc(GroupDO::getSortOrder,GroupDO::getUpdateTime);
         List<GroupDO> groupDOList = baseMapper.selectList(eq);
         return BeanUtil.copyToList(groupDOList, ShortLinkGroupResqDTO.class);
     }
@@ -87,6 +88,25 @@ public class GroupServiseImpl extends ServiceImpl<GroupMapper, GroupDO> implemen
         //软删除
         groupDO.setDelFlag(1);
         baseMapper.update(groupDO, eq);
+
+    }
+
+    /**
+     * 排序
+     * @param shortLinkGroupSortReqDTO
+     */
+    @Override
+    public void sortGroup(List<ShortLinkGroupSortReqDTO> shortLinkGroupSortReqDTO) {
+        shortLinkGroupSortReqDTO.forEach(each ->{
+            GroupDO build = GroupDO.builder()
+                    .sortOrder(each.getSortOrder())
+                    .build();
+            LambdaUpdateWrapper<GroupDO> eq = Wrappers.lambdaUpdate(GroupDO.class)
+                    .eq(GroupDO::getUsername, UserContext.getUsername())
+                    .eq(GroupDO::getGid, each.getGid())
+                    .eq(GroupDO::getDelFlag, 0);
+            baseMapper.update(build, eq);
+        });
 
     }
 
