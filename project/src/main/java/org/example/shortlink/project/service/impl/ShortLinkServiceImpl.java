@@ -2,6 +2,7 @@ package org.example.shortlink.project.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,9 @@ import org.example.shortlink.project.common.convention.exception.ServiceExceptio
 import org.example.shortlink.project.dao.entity.ShortLinkDO;
 import org.example.shortlink.project.dao.mapper.ShortLinkMapper;
 import org.example.shortlink.project.dto.req.ShortLinkCreateReqDTO;
+import org.example.shortlink.project.dto.req.ShortLinkPageReqDTO;
 import org.example.shortlink.project.dto.resq.ShortLinkCreateResqDTO;
+import org.example.shortlink.project.dto.resq.ShortLinkPageResqDTO;
 import org.example.shortlink.project.service.ShortLinkService;
 import org.example.shortlink.project.toolkit.HashUtil;
 import org.redisson.api.RBloomFilter;
@@ -60,6 +63,21 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                 .originUrl(shortLinkCreateReqDTO.getOriginUrl())
                 .gid(shortLinkCreateReqDTO.getGid())
                 .build();
+    }
+
+    /**
+     * 分页查询
+     * @param shortLinkPageReqDTO
+     * @return
+     */
+    @Override
+    public IPage<ShortLinkPageResqDTO> pageShortLink(ShortLinkPageReqDTO shortLinkPageReqDTO) {
+        LambdaQueryWrapper<ShortLinkDO> eq = Wrappers.lambdaQuery(ShortLinkDO.class).eq(ShortLinkDO::getGid, shortLinkPageReqDTO.getGid())
+                .eq(ShortLinkDO::getEnableStatus, 0)
+                .eq(ShortLinkDO::getDelFlag, 0)
+                .orderByAsc(ShortLinkDO::getCreateTime);
+        IPage<ShortLinkDO> p = baseMapper.selectPage(shortLinkPageReqDTO, eq);
+        return p.convert(each -> BeanUtil.toBean(each, ShortLinkPageResqDTO.class));
     }
 
     private String generateSuffix(ShortLinkCreateReqDTO shortLinkCreateReqDTO) {
