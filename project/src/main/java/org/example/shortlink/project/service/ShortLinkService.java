@@ -4,9 +4,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.example.shortlink.project.dao.entity.ShortLinkDO;
 import org.example.shortlink.project.dto.req.ShortLinkCreateReqDTO;
+import org.example.shortlink.project.dto.req.ShortLinkGroupCountQueryResqDTO;
 import org.example.shortlink.project.dto.req.ShortLinkPageReqDTO;
 import org.example.shortlink.project.dto.resq.ShortLinkCreateResqDTO;
 import org.example.shortlink.project.dto.resq.ShortLinkPageResqDTO;
+
+import java.util.List;
 
 /**
  * @author LLY
@@ -29,4 +32,11 @@ public interface ShortLinkService extends IService<ShortLinkDO> {
      * @return
      */
     IPage<ShortLinkPageResqDTO> pageShortLink(ShortLinkPageReqDTO shortLinkPageReqDTO);
+
+    /**
+     * 查询短链接组内数量
+     * @param gids
+     * @return
+     */
+    List<ShortLinkGroupCountQueryResqDTO> listGroupShortLinkCount(List<String> gids);
 }

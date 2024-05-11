@@ -6,14 +6,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.shortlink.project.common.convention.result.Result;
 import org.example.shortlink.project.common.convention.result.Results;
 import org.example.shortlink.project.dto.req.ShortLinkCreateReqDTO;
+import org.example.shortlink.project.dto.req.ShortLinkGroupCountQueryResqDTO;
 import org.example.shortlink.project.dto.req.ShortLinkPageReqDTO;
 import org.example.shortlink.project.dto.resq.ShortLinkCreateResqDTO;
 import org.example.shortlink.project.dto.resq.ShortLinkPageResqDTO;
 import org.example.shortlink.project.service.ShortLinkService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author LLY
@@ -47,5 +47,17 @@ public class ShortLinkController {
     public Result<IPage<ShortLinkPageResqDTO>> pageShortLink( ShortLinkPageReqDTO shortLinkPageReqDTO){
         log.info("分页查询短链接，gid:{}", shortLinkPageReqDTO.getGid());
         return Results.success(shortLinkService.pageShortLink(shortLinkPageReqDTO));
+    }
+
+    /**
+     * 查询短链接组内数量
+     * @param gids
+     * @return
+     */
+    @GetMapping("/api/short-link/v1/count")
+    public Result<List<ShortLinkGroupCountQueryResqDTO>> listGroupShortLinkCount(@RequestParam("gids") List<String> gids){
+        log.info("查询短链接组内数量,gid：{}",gids);
+        return Results.success(shortLinkService.listGroupShortLinkCount(gids));
+
     }
 }
