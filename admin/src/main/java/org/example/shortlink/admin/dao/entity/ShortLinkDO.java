@@ -1,19 +1,32 @@
-package org.example.shortlink.project.dto.resq;
+package org.example.shortlink.admin.dao.entity;
 
-import cn.hutool.db.Page;
+/**
+ * @author LLY
+ * @version v1.0.0
+ * @date 2024/5/10 下午3:23
+ * @className ShortLinkDO
+ * @copyright LLY
+ */
+
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Data;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.*;
+import org.example.shortlink.admin.common.database.BaseDO;
 
 import java.util.Date;
 
 /**
- * @author LLY
- * @className ShortLinkCreateReqDTO
- * @date 2024/5/9
+ * @description t_link
+ * @author zhengkai.blog.csdn.net
+ * @date 2024-05-10
  */
+@EqualsAndHashCode(callSuper = true)
+@TableName("t_link")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
-public class ShortLinkPageResqDTO extends Page {
+public class ShortLinkDO extends BaseDO {
 
     /**
      * id
@@ -50,6 +63,10 @@ public class ShortLinkPageResqDTO extends Page {
      */
     private String gid;
 
+    /**
+     * 启用标识0：启用
+     */
+    private int enableStatus;
 
     /**
      * 创建类型
@@ -67,12 +84,6 @@ public class ShortLinkPageResqDTO extends Page {
     private Date validDate;
 
     /**
-     * 创建时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    private Date createTime;
-
-    /**
      * 描述
      */
     @TableField("`describe`")
@@ -82,4 +93,5 @@ public class ShortLinkPageResqDTO extends Page {
      * 网站图标
      */
     private String favicon;
+
 }
