@@ -18,10 +18,7 @@ import org.example.shortlink.admin.common.database.BaseDO;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GroupDO extends BaseDO {
-    /**
-     * id
-     */
-    private Long id;
+
 
     /**
      * 分组标识

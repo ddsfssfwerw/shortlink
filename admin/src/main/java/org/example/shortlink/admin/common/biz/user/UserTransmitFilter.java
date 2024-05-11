@@ -58,10 +58,13 @@ public class UserTransmitFilter implements Filter {
                     if (userInfo == null){
                         throw new ClientException(UserErrorCodeEnum.USER_TOKEN_FAIL);
                     }
+
                 } catch (Exception e) {
                     returnJson((HttpServletResponse) servletResponse,JSON.toJSONString(Results.failure(new ClientException(UserErrorCodeEnum.USER_TOKEN_FAIL))));
                     return;
                 }
+                UserInfoDTO userInfoDTO = JSON.parseObject(userInfo.toString(), UserInfoDTO.class);
+                UserContext.setUser(userInfoDTO);
 
             }
         }

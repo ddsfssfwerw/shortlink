@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.shortlink.admin.common.biz.user.UserContext;
 import org.example.shortlink.admin.dao.entity.GroupDO;
@@ -26,8 +27,14 @@ import java.util.List;
  */
 @Service
 @Slf4j
+@RequiredArgsConstructor//注入bean
 public class GroupServiseImpl extends ServiceImpl<GroupMapper, GroupDO> implements GroupServise {
 
+
+    /**
+     * 新增分组
+     * @param saveReqDTO
+     */
     @Override
     public void saveGroup(ShortLinkGroupSaveReqDTO saveReqDTO) {
         String gid;
@@ -111,9 +118,10 @@ public class GroupServiseImpl extends ServiceImpl<GroupMapper, GroupDO> implemen
     }
 
     private boolean hasGroup(String gid){
+        String username = UserContext.getUsername();
         LambdaQueryWrapper<GroupDO> eq = Wrappers.lambdaQuery(GroupDO.class)
                 .eq(GroupDO::getGid, gid)
-                .eq(GroupDO::getUsername, UserContext.getUsername());
+                .eq(GroupDO::getUsername, username);
         GroupDO groupDO = baseMapper.selectOne(eq);
         return groupDO == null;
     }
