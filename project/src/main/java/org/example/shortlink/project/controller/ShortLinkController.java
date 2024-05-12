@@ -1,6 +1,12 @@
 package org.example.shortlink.project.controller;
 
+import cn.hutool.http.server.HttpServerRequest;
+import cn.hutool.http.server.HttpServerResponse;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import lombok.Getter;
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.shortlink.project.common.convention.result.Result;
@@ -13,6 +19,8 @@ import org.example.shortlink.project.dto.resq.ShortLinkCreateResqDTO;
 import org.example.shortlink.project.dto.resq.ShortLinkPageResqDTO;
 import org.example.shortlink.project.service.ShortLinkService;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.function.ServerRequest;
+import org.springframework.web.servlet.function.ServerResponse;
 
 import java.util.List;
 
@@ -75,6 +83,18 @@ public class ShortLinkController {
         log.info("修改短链接：{}",shortLinkUpdateReqDTO.getGid());
         shortLinkService.updateShortLink(shortLinkUpdateReqDTO);
         return Results.success();
+
+    }
+
+    /**
+     * 跳转
+     * @param shortUri
+     * @param request
+     * @param response
+     */
+    @GetMapping("/{short-uri}")
+    public void restoreUrl(@RequestParam("short-uri") String shortUri, ServletRequest request, ServletResponse response){
+        shortLinkService.restoreUrl(shortUri,request,response);
 
     }
 }
