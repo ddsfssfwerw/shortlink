@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.shortlink.project.common.convention.result.Result;
 import org.example.shortlink.project.common.convention.result.Results;
 import org.example.shortlink.project.dto.req.ShortLinkCreateReqDTO;
+import org.example.shortlink.project.dto.req.ShortLinkUpdateReqDTO;
 import org.example.shortlink.project.dto.resq.ShortLinkGroupCountQueryResqDTO;
 import org.example.shortlink.project.dto.req.ShortLinkPageReqDTO;
 import org.example.shortlink.project.dto.resq.ShortLinkCreateResqDTO;
@@ -58,6 +59,22 @@ public class ShortLinkController {
     public Result<List<ShortLinkGroupCountQueryResqDTO>> listGroupShortLinkCount(@RequestParam("gids") List<String> gids){
         log.info("查询短链接组内数量,gid：{}",gids);
         return Results.success(shortLinkService.listGroupShortLinkCount(gids));
+
+    }
+    /**
+     * 修改短链接
+     * @param shortLinkUpdateReqDTO
+     * @return
+     *     "createdType": 37,
+     *     "validDateType": 44,
+     *     "validDate": "",
+     *     "describe": "Excepteur"
+     */
+    @PostMapping("/api/short-link/v1/update")
+    public Result<Void> updateShortLink(@RequestBody ShortLinkUpdateReqDTO shortLinkUpdateReqDTO){
+        log.info("修改短链接：{}",shortLinkUpdateReqDTO.getGid());
+        shortLinkService.updateShortLink(shortLinkUpdateReqDTO);
+        return Results.success();
 
     }
 }

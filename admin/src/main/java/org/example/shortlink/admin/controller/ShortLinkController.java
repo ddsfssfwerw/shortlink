@@ -8,6 +8,7 @@ import org.example.shortlink.admin.common.convention.result.Results;
 import org.example.shortlink.admin.remote.ShortLinkRemoteService;
 import org.example.shortlink.admin.remote.dto.req.ShortLinkCreateReqDTO;
 import org.example.shortlink.admin.remote.dto.req.ShortLinkPageReqDTO;
+import org.example.shortlink.admin.remote.dto.req.ShortLinkUpdateReqDTO;
 import org.example.shortlink.admin.remote.dto.resq.ShortLinkCreateResqDTO;
 import org.example.shortlink.admin.remote.dto.resq.ShortLinkPageResqDTO;
 import org.springframework.web.bind.annotation.*;
@@ -40,6 +41,19 @@ public class ShortLinkController {
         Result<ShortLinkCreateResqDTO> shortLink = ShortLinkRemoteService.createShortLink(shortLinkCreateReqDTO);
         log.info("创建短链接： {}", shortLink.getData().getFullShortUrl());
         return shortLink;
+    }
+
+    /**
+     * 修改短链接
+     * @param shortLinkUpdateReqDTO
+     * @return
+     */
+    @PostMapping("/api/short-link/admin/v1/update")
+    public Result<Void> updateShortLink(@RequestBody ShortLinkUpdateReqDTO shortLinkUpdateReqDTO){
+        log.info("修改短链接,gid:{},fullShortUrl:{}",shortLinkUpdateReqDTO.getGid(),shortLinkUpdateReqDTO.getFullShortUrl());
+        shortLinkRemoteService.updateShortLink(shortLinkUpdateReqDTO);
+        return Results.success();
+
     }
 
 
