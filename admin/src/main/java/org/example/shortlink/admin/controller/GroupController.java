@@ -8,6 +8,7 @@ import org.example.shortlink.admin.dto.req.ShortLinkGroupSaveReqDTO;
 import org.example.shortlink.admin.dto.req.ShortLinkGroupSortReqDTO;
 import org.example.shortlink.admin.dto.req.ShortLinkGroupUpdateReqDTO;
 import org.example.shortlink.admin.dto.resq.ShortLinkGroupResqDTO;
+import org.example.shortlink.admin.remote.ShortLinkRemoteService;
 import org.example.shortlink.admin.service.GroupServise;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +24,7 @@ import java.util.List;
 @Slf4j
 public class GroupController {
     private final GroupServise groupServise;
+
 
     /**
      * 新建分组

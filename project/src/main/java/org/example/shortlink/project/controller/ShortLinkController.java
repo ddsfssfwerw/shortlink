@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.shortlink.project.common.convention.result.Result;
 import org.example.shortlink.project.common.convention.result.Results;
 import org.example.shortlink.project.dto.req.ShortLinkCreateReqDTO;
-import org.example.shortlink.project.dto.req.ShortLinkGroupCountQueryResqDTO;
+import org.example.shortlink.project.dto.resq.ShortLinkGroupCountQueryResqDTO;
 import org.example.shortlink.project.dto.req.ShortLinkPageReqDTO;
 import org.example.shortlink.project.dto.resq.ShortLinkCreateResqDTO;
 import org.example.shortlink.project.dto.resq.ShortLinkPageResqDTO;

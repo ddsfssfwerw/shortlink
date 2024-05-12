@@ -12,7 +12,7 @@ import org.example.shortlink.project.common.convention.exception.ServiceExceptio
 import org.example.shortlink.project.dao.entity.ShortLinkDO;
 import org.example.shortlink.project.dao.mapper.ShortLinkMapper;
 import org.example.shortlink.project.dto.req.ShortLinkCreateReqDTO;
-import org.example.shortlink.project.dto.req.ShortLinkGroupCountQueryResqDTO;
+import org.example.shortlink.project.dto.resq.ShortLinkGroupCountQueryResqDTO;
 import org.example.shortlink.project.dto.req.ShortLinkPageReqDTO;
 import org.example.shortlink.project.dto.resq.ShortLinkCreateResqDTO;
 import org.example.shortlink.project.dto.resq.ShortLinkPageResqDTO;

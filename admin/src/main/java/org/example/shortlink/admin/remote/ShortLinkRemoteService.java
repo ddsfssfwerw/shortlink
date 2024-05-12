@@ -8,9 +8,11 @@ import org.example.shortlink.admin.common.convention.result.Result;
 import org.example.shortlink.admin.remote.dto.req.ShortLinkCreateReqDTO;
 import org.example.shortlink.admin.remote.dto.req.ShortLinkPageReqDTO;
 import org.example.shortlink.admin.remote.dto.resq.ShortLinkCreateResqDTO;
+import org.example.shortlink.admin.remote.dto.resq.ShortLinkGroupCountQueryResqDTO;
 import org.example.shortlink.admin.remote.dto.resq.ShortLinkPageResqDTO;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,6 +38,11 @@ public interface ShortLinkRemoteService {
         });
     }
 
+    /**
+     * 分页查询
+     * @param reqDTO
+     * @return
+     */
     default Result<IPage<ShortLinkPageResqDTO>> pageShortLink(ShortLinkPageReqDTO reqDTO) {
         Map<String,Object> resultMap = new HashMap<String,Object>();
         resultMap.put("gid", reqDTO.getGid());
@@ -47,6 +54,22 @@ public interface ShortLinkRemoteService {
         return JSON.parseObject(s, new TypeReference<Result<IPage<ShortLinkPageResqDTO>>>() {
             @Override
             public Result<IPage<ShortLinkPageResqDTO>> parseObject(String text) {
+                return super.parseObject(text);
+            }
+        });
+    }
+    /**
+     * 查询分组内数量
+     * @param gids
+     * @return
+     */
+    default Result<List<ShortLinkGroupCountQueryResqDTO>> listGroupShortLinkCount(List<String> gids) {
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        resultMap.put("gids", gids);
+        String s = HttpUtil.get("http://127.0.0.1:8001/api/short-link/v1/count", resultMap);
+        return JSON.parseObject(s, new TypeReference<Result<List<ShortLinkGroupCountQueryResqDTO>>>() {
+            @Override
+            public Result<List<ShortLinkGroupCountQueryResqDTO>> parseObject(String text) {
                 return super.parseObject(text);
             }
         });
