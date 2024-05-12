@@ -37,11 +37,8 @@ public class GroupServiseImpl extends ServiceImpl<GroupMapper, GroupDO> implemen
     ShortLinkRemoteService shortLinkRemoteService = new ShortLinkRemoteService() {
     };
 
-    /**
-     * 新增分组
-     * @param saveReqDTO
-     */
-    @Override
+
+/*    @Override
     public void saveGroup(ShortLinkGroupSaveReqDTO saveReqDTO) {
         String gid;
         do{
@@ -55,6 +52,35 @@ public class GroupServiseImpl extends ServiceImpl<GroupMapper, GroupDO> implemen
                 .username(UserContext.getUsername())
                 .sortOrder(0)
                 .name(saveReqDTO.getName())
+                .build();
+        baseMapper.insert(build);
+
+    }*/
+
+    /**
+     * 新增分组
+     * @param name
+     */
+    @Override
+    public void saveGroup(String name) {
+        saveGroup(UserContext.getUsername(), name);
+
+    }
+
+    @Override
+    public void saveGroup(String username, String name) {
+        String gid;
+        do{
+            gid = RandomStringUtil.generateRandomString();
+            if (hasGroup(username,gid)){
+                break;
+            }
+        }while (true);
+        GroupDO build = GroupDO.builder()
+                .gid(gid)
+                .username(username)
+                .sortOrder(0)
+                .name(name)
                 .build();
         baseMapper.insert(build);
 
@@ -136,11 +162,11 @@ public class GroupServiseImpl extends ServiceImpl<GroupMapper, GroupDO> implemen
 
     }
 
-    private boolean hasGroup(String gid){
-        String username = UserContext.getUsername();
+    private boolean hasGroup(String username,String gid){
+        //String username = UserContext.getUsername();
         LambdaQueryWrapper<GroupDO> eq = Wrappers.lambdaQuery(GroupDO.class)
                 .eq(GroupDO::getGid, gid)
-                .eq(GroupDO::getUsername, username);
+                .eq(GroupDO::getUsername, Optional.ofNullable(username).orElse(UserContext.getUsername()));
         GroupDO groupDO = baseMapper.selectOne(eq);
         return groupDO == null;
     }

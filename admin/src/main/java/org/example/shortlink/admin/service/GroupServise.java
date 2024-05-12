@@ -18,10 +18,16 @@ public interface GroupServise extends IService<GroupDO> {
 
     /**
      * 新增分组
-     * @param saveReqDTO
+     * @param name
      */
-    void saveGroup(ShortLinkGroupSaveReqDTO saveReqDTO);
+    void saveGroup(String name);
 
+    /**
+     * 新增分组
+     * @param username
+     * @param name
+     */
+    void saveGroup(String username,String name);
     /**
      * 查询分组
      */

@@ -5,18 +5,22 @@ import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.protobuf.Field;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.shortlink.admin.common.biz.user.UserContext;
 import org.example.shortlink.admin.common.constant.RedisCacheConstant;
 import org.example.shortlink.admin.common.convention.exception.ClientException;
 import org.example.shortlink.admin.common.enums.UserErrorCodeEnum;
 import org.example.shortlink.admin.dao.entity.UserDO;
 import org.example.shortlink.admin.dao.mapper.UserMapper;
+import org.example.shortlink.admin.dto.req.ShortLinkGroupSaveReqDTO;
 import org.example.shortlink.admin.dto.req.UserLoginReqDTO;
 import org.example.shortlink.admin.dto.req.UserRegisterReqDTO;
 import org.example.shortlink.admin.dto.req.UserUpdateReqDTO;
 import org.example.shortlink.admin.dto.resq.UserLoginResqDTO;
 import org.example.shortlink.admin.dto.resq.UserResqDTO;
+import org.example.shortlink.admin.service.GroupServise;
 import org.example.shortlink.admin.service.UserService;
 import org.redisson.api.RBloomFilter;
 import org.redisson.api.RLock;
@@ -47,6 +51,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
     private final RBloomFilter<String> userRegisterCachePenetrationBloomFilter;
     private final RedissonClient redissonClient;
     private final StringRedisTemplate stringRedisTemplate;
+    private final GroupServise groupServise;
 
     /**
      * 根据用户名查询用户信息
@@ -105,6 +110,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
                     throw new ClientException(USER_EXIST);
                 }
                 userRegisterCachePenetrationBloomFilter.add(userRegisterReqDTO.getUsername());
+                groupServise.saveGroup(userRegisterReqDTO.getUsername(),"默认分组");
                 return;
             }
             throw new ClientException(USER_NAME_EXIST);
