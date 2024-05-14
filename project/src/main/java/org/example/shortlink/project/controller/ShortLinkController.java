@@ -93,7 +93,8 @@ public class ShortLinkController {
      * @param response
      */
     @GetMapping("/{short-uri}")
-    public void restoreUrl(@RequestParam("short-uri") String shortUri, ServletRequest request, ServletResponse response){
+    public void restoreUrl(@PathVariable("short-uri") String shortUri, ServletRequest request, ServletResponse response){
+        log.info("跳转请求：{}", shortUri);
         shortLinkService.restoreUrl(shortUri,request,response);
 
     }

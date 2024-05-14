@@ -1,8 +1,6 @@
 package org.example.shortlink.project.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.http.server.HttpServerRequest;
-import cn.hutool.http.server.HttpServerResponse;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -34,8 +32,6 @@ import org.redisson.api.RBloomFilter;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.servlet.function.ServerRequest;
-import org.springframework.web.servlet.function.ServerResponse;
 
 import java.util.List;
 import java.util.Map;
@@ -87,7 +83,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
         }
         shortUriCreaterCachePenetrationBloomFilter.add(fullShortUrl);
         return ShortLinkCreateResqDTO.builder()
-                .fullShortUrl(shortLinkDO.getFullShortUrl())
+                .fullShortUrl("http://"+shortLinkDO.getFullShortUrl())
                 .originUrl(shortLinkCreateReqDTO.getOriginUrl())
                 .gid(shortLinkCreateReqDTO.getGid())
                 .build();
@@ -105,7 +101,11 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                 .eq(ShortLinkDO::getDelFlag, 0)
                 .orderByAsc(ShortLinkDO::getCreateTime);
         IPage<ShortLinkDO> p = baseMapper.selectPage(shortLinkPageReqDTO, eq);
-        return p.convert(each -> BeanUtil.toBean(each, ShortLinkPageResqDTO.class));
+        return p.convert(each -> {
+            ShortLinkPageResqDTO result = BeanUtil.toBean(each, ShortLinkPageResqDTO.class);
+            result.setDomain("http://" + result.getDomain());
+            return result;
+        });
     }
 
     /**
