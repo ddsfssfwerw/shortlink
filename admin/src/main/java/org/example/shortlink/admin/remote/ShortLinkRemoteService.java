@@ -8,6 +8,7 @@ import org.example.shortlink.admin.common.convention.result.Result;
 import org.example.shortlink.admin.dto.req.RecycleBinSaveReqDTO;
 import org.example.shortlink.admin.remote.dto.req.ShortLinkCreateReqDTO;
 import org.example.shortlink.admin.remote.dto.req.ShortLinkPageReqDTO;
+import org.example.shortlink.admin.remote.dto.req.ShortLinkRecycleBinPageReqDTO;
 import org.example.shortlink.admin.remote.dto.req.ShortLinkUpdateReqDTO;
 import org.example.shortlink.admin.remote.dto.resq.ShortLinkCreateResqDTO;
 import org.example.shortlink.admin.remote.dto.resq.ShortLinkGroupCountQueryResqDTO;
@@ -104,10 +105,10 @@ public interface ShortLinkRemoteService {
      * @param reqDTO
      * @return
      */
-    default Result<IPage<ShortLinkPageResqDTO>> pageRecyclebinShortLink(ShortLinkPageReqDTO reqDTO) {
+    default Result<IPage<ShortLinkPageResqDTO>> pageRecyclebinShortLink(ShortLinkRecycleBinPageReqDTO reqDTO) {
         Map<String,Object> resultMap = new HashMap<String,Object>();
-        resultMap.put("gid", reqDTO.getGid());
         resultMap.put("current", reqDTO.getCurrent());
+        resultMap.put("gids", reqDTO.getGids());
         resultMap.put("size", reqDTO.getSize());
         String s = HttpUtil.get("http://127.0.0.1:8001/api/short-link/v1/recycle-bin/page", resultMap);
         //JSON.parseObject(s,ShortLinkPageResqDTO.class);

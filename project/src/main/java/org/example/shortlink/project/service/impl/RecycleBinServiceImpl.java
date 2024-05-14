@@ -14,6 +14,7 @@ import org.example.shortlink.project.dao.mapper.ShortLinkGotoMapper;
 import org.example.shortlink.project.dao.mapper.ShortLinkMapper;
 import org.example.shortlink.project.dto.req.RecycleBinSaveReqDTO;
 import org.example.shortlink.project.dto.req.ShortLinkPageReqDTO;
+import org.example.shortlink.project.dto.req.ShortLinkRecycleBinPageReqDTO;
 import org.example.shortlink.project.dto.resq.ShortLinkPageResqDTO;
 import org.example.shortlink.project.service.RecycleBinService;
 import org.example.shortlink.project.toolkit.LinkUtil;
@@ -36,10 +37,8 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor//注入bean
 public class RecycleBinServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLinkDO> implements RecycleBinService {
 
-    private final RBloomFilter<String> shortUriCreaterCachePenetrationBloomFilter;
-    private final ShortLinkGotoMapper shortLinkGotoMapper;
     private final StringRedisTemplate stringRedisTemplate;
-    private final RedissonClient redissonClient;
+
     /**
      * @param requestParam
      */
@@ -64,11 +63,12 @@ public class RecycleBinServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLin
      * @return
      */
     @Override
-    public IPage<ShortLinkPageResqDTO> pageShortLink(ShortLinkPageReqDTO shortLinkPageReqDTO) {
-        LambdaQueryWrapper<ShortLinkDO> eq = Wrappers.lambdaQuery(ShortLinkDO.class).eq(ShortLinkDO::getGid, shortLinkPageReqDTO.getGid())
+    public IPage<ShortLinkPageResqDTO> pageShortLink(ShortLinkRecycleBinPageReqDTO shortLinkPageReqDTO) {
+        LambdaQueryWrapper<ShortLinkDO> eq = Wrappers.lambdaQuery(ShortLinkDO.class)
+                .in(ShortLinkDO::getGid,shortLinkPageReqDTO.getGids())
                 .eq(ShortLinkDO::getEnableStatus, 1)
                 .eq(ShortLinkDO::getDelFlag, 0)
-                .orderByAsc(ShortLinkDO::getCreateTime);
+                .orderByAsc(ShortLinkDO::getUpdateTime);
         IPage<ShortLinkDO> p = baseMapper.selectPage(shortLinkPageReqDTO, eq);
         return p.convert(each -> {
             ShortLinkPageResqDTO result = BeanUtil.toBean(each, ShortLinkPageResqDTO.class);
