@@ -26,7 +26,7 @@ public class UrlTitleController {
 
 
     /**
-     * 获取url的标题
+     * 获取url的标题.
      * @param url
      * @return
      */
