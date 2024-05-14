@@ -16,6 +16,7 @@ import java.util.Optional;
  */
 public class LinkUtil {
     public static long getLinkCacheValidTime(Date validDate){
+        //long between = DateUtil.between(new Date(), validDate, DateUnit.MS);
         return Optional.ofNullable(validDate).map(each -> DateUtil.between(new Date(), each
         , DateUnit.MS)).orElse(ShortLinkConstant.DEFAULT_CACHE_VALID_TIME);
 

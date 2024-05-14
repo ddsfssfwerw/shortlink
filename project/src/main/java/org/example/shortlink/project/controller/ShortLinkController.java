@@ -87,7 +87,7 @@ public class ShortLinkController {
     }
 
     /**
-     * 跳转
+     * 跳转到原始连接
      * @param shortUri
      * @param request
      * @param response
