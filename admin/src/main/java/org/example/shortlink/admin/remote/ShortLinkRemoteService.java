@@ -11,6 +11,7 @@ import org.example.shortlink.admin.remote.dto.req.ShortLinkUpdateReqDTO;
 import org.example.shortlink.admin.remote.dto.resq.ShortLinkCreateResqDTO;
 import org.example.shortlink.admin.remote.dto.resq.ShortLinkGroupCountQueryResqDTO;
 import org.example.shortlink.admin.remote.dto.resq.ShortLinkPageResqDTO;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
 import java.util.List;
@@ -83,5 +84,11 @@ public interface ShortLinkRemoteService {
     default void updateShortLink(ShortLinkUpdateReqDTO requestParam){
         HttpUtil.post("http://127.0.0.1:8001/api/short-link/v1/update", JSON.toJSONString(requestParam));
 
+    }
+
+    default Result<String> getTitleByUrl(String url){
+        String s = HttpUtil.get("http://127.0.0.1:8001/api/short-link/v1/title?url="+url);
+        return JSON.parseObject(s, new TypeReference<>() {}
+        );
     }
 }
