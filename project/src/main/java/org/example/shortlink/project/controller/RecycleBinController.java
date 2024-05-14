@@ -1,10 +1,15 @@
 package org.example.shortlink.project.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.shortlink.project.common.convention.result.Result;
 import org.example.shortlink.project.common.convention.result.Results;
 import org.example.shortlink.project.dto.req.RecycleBinSaveReqDTO;
+import org.example.shortlink.project.dto.req.ShortLinkPageReqDTO;
+import org.example.shortlink.project.dto.resq.ShortLinkPageResqDTO;
 import org.example.shortlink.project.service.RecycleBinService;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class RecycleBinController {
     private final RecycleBinService recycleBinService;
 
@@ -30,5 +36,16 @@ public class RecycleBinController {
     public Result<Void> saveRecycleBin(@RequestBody RecycleBinSaveReqDTO requestParam){
         recycleBinService.saveRecycleBin(requestParam);
         return Results.success();
+    }
+
+    /**
+     * 分页查询
+     * @param shortLinkPageReqDTO
+     * @return
+     */
+    @GetMapping("/api/short-link/v1/recycle-bin/page")
+    public Result<IPage<ShortLinkPageResqDTO>> pageShortLink(ShortLinkPageReqDTO shortLinkPageReqDTO){
+        log.info("分页查询短链接，gid:{}", shortLinkPageReqDTO.getGid());
+        return Results.success(recycleBinService.pageShortLink(shortLinkPageReqDTO));
     }
 }

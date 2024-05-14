@@ -62,6 +62,7 @@ public interface ShortLinkRemoteService {
             }
         });
     }
+
     /**
      * 查询分组内数量
      * @param gids
@@ -96,5 +97,25 @@ public interface ShortLinkRemoteService {
 
     default void saveRecycleBin(@RequestBody RecycleBinSaveReqDTO requestParam){
         HttpUtil.post("http://127.0.0.1:8001/api/short-link/v1/recycle-bin/save", JSON.toJSONString(requestParam));
+    }
+
+    /**
+     * 分页查询回收站
+     * @param reqDTO
+     * @return
+     */
+    default Result<IPage<ShortLinkPageResqDTO>> pageRecyclebinShortLink(ShortLinkPageReqDTO reqDTO) {
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        resultMap.put("gid", reqDTO.getGid());
+        resultMap.put("current", reqDTO.getCurrent());
+        resultMap.put("size", reqDTO.getSize());
+        String s = HttpUtil.get("http://127.0.0.1:8001/api/short-link/v1/recycle-bin/page", resultMap);
+        //JSON.parseObject(s,ShortLinkPageResqDTO.class);
+        return JSON.parseObject(s, new TypeReference<Result<IPage<ShortLinkPageResqDTO>>>() {
+            @Override
+            public Result<IPage<ShortLinkPageResqDTO>> parseObject(String text) {
+                return super.parseObject(text);
+            }
+        });
     }
 }
