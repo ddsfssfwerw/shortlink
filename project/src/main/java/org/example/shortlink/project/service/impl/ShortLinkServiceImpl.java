@@ -7,6 +7,9 @@ import cn.hutool.core.date.Week;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.http.HttpUtil;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -295,7 +298,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
     private void shortLinkStats(String fullShortUri,String gid, ServletRequest request, ServletResponse response){
         AtomicBoolean uvFirstFlag = new AtomicBoolean();
         Cookie[] cookies = ((HttpServletRequest) request).getCookies();
-        try {
+        //try {
             Runnable addResponseCookieTask = ()->{
                 String uv = UUID.fastUUID().toString();
                 Cookie uvCookie = new Cookie("uv", uv);
@@ -341,15 +344,32 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                     .date(new Date())
                     .build();
             linkAccessStatsMapper.shortLinkStats(linkAccessStatsDO);
-            LinkLocaleStatsDO linkLocaleStatsDO = LinkLocaleStatsDO.builder()
-                    .fullShortUrl(fullShortUri)
-                    .gid(gid)
-                    .date(new Date())
-                    .build();
-            linkLocaleStatsMapper.shortLinkLocaleState(linkLocaleStatsDO);
-        } catch (Exception e) {
-            log.info("监控短链接出错");
-        }
+            Map<String,Object> localeParamMap = new HashMap<>();
+            localeParamMap.put("key", statsLocaleamapkey);
+            localeParamMap.put("ip", remoteAddr);
+            String localeResultStr = HttpUtil.get(ShortLinkConstant.AMAP_REMOTE_URL, localeParamMap);
+            JSONObject localeResultObj = JSON.parseObject(localeResultStr);
+            String infoCode = localeResultObj.getString("infocode");
+            LinkLocaleStatsDO linkLocaleStatsDO;
+            if (StrUtil.isNotBlank(infoCode) && StrUtil.equals(infoCode,"10000")) {
+                String province = localeResultObj.getString("province");
+                boolean unknownFlag = StrUtil.isBlank(province);
+                linkLocaleStatsDO = LinkLocaleStatsDO.builder()
+                        .province(unknownFlag?"未知":province)
+                        .city(unknownFlag?"未知":localeResultObj.getString("city"))
+                        .adcode(unknownFlag?"未知":localeResultObj.getString("adcode"))
+                        .cnt(1)
+                        .fullShortUrl(fullShortUri)
+                        .country("中国")
+                        .gid(gid)
+                        .date(new Date())
+                        .build();
+                linkLocaleStatsMapper.shortLinkLocaleState(linkLocaleStatsDO);
+            }
+        //} catch (Exception e) {
+          //  log.info("监控短链接出错");
+           // System.out.println(e.getMessage());
+        //}
 
     }
 
