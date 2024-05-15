@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.shortlink.project.common.convention.result.Result;
 import org.example.shortlink.project.common.convention.result.Results;
+import org.example.shortlink.project.dto.req.RecycleBinRecoverReqDTO;
 import org.example.shortlink.project.dto.req.RecycleBinSaveReqDTO;
 import org.example.shortlink.project.dto.req.ShortLinkPageReqDTO;
 import org.example.shortlink.project.dto.req.ShortLinkRecycleBinPageReqDTO;
@@ -29,7 +30,7 @@ public class RecycleBinController {
     private final RecycleBinService recycleBinService;
 
     /**
-     * 新增回收站
+     * 移至回收站
      * @param requestParam
      * @return
      */
@@ -48,5 +49,17 @@ public class RecycleBinController {
     public Result<IPage<ShortLinkPageResqDTO>> pageShortLink(ShortLinkRecycleBinPageReqDTO shortLinkPageReqDTO){
         log.info("分页查询短链接，gid:{}", shortLinkPageReqDTO.getGids());
         return Results.success(recycleBinService.pageShortLink(shortLinkPageReqDTO));
+    }
+
+    /**
+     * 移出回收站
+     * @param requestParam
+     * @return
+     */
+    @PostMapping("/api/short-link/v1/recycle-bin/recover")
+    public Result<Void> recoverRecycleBin(@RequestBody RecycleBinRecoverReqDTO requestParam){
+        log.info("移除回收站：{}", requestParam.getFullShortUrl());
+        recycleBinService.recoverRecycleBin(requestParam);
+        return Results.success();
     }
 }

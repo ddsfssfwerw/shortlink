@@ -3,6 +3,7 @@ package org.example.shortlink.admin.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.shortlink.admin.dto.req.RecycleBinRecoverReqDTO;
 import org.example.shortlink.admin.remote.ShortLinkRemoteService;
 import org.example.shortlink.admin.common.convention.result.Result;
 import org.example.shortlink.admin.common.convention.result.Results;
@@ -52,5 +53,17 @@ public class RecycleBinController {
         //log.info("分页查询回收站短链接，gid：{}",shortLinkPageReqDTO.getGid());
         return recycleBinService.pageRecyclebinShortLink(shortLinkPageReqDTO);
 
+    }
+
+    /**
+     * 移出回收站
+     * @param requestParam
+     * @return
+     */
+    @PostMapping("/api/short-link/admin/v1/recycle-bin/recover")
+    public Result<Void> recoverRecycleBin(@RequestBody RecycleBinRecoverReqDTO requestParam){
+        log.info("移除回收站：{}", requestParam.getFullShortUrl());
+        shortLinkRemoteService.recoverRecycleBin(requestParam);
+        return Results.success();
     }
 }
