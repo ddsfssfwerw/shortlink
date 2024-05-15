@@ -37,10 +37,6 @@ import java.util.Date;
 @AllArgsConstructor
 public class LinkLocaleStatsDO extends BaseDO {
 
-    /**
-     * id
-     */
-    private Long id;
 
     /**
      * gid
