@@ -42,6 +42,12 @@ public class LinkOsStatsDO extends BaseDO {
      */
     private Long id;
 
+
+    /**
+     * gid
+     */
+    private String gid;
+
     /**
      * 完整短链接
      */

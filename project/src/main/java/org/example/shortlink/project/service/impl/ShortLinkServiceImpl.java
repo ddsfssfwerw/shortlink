@@ -29,14 +29,8 @@ import org.example.shortlink.project.common.constant.ShortLinkConstant;
 import org.example.shortlink.project.common.convention.exception.ClientException;
 import org.example.shortlink.project.common.convention.exception.ServiceException;
 import org.example.shortlink.project.common.enums.VailDateTypeEnum;
-import org.example.shortlink.project.dao.entity.LinkAccessStatsDO;
-import org.example.shortlink.project.dao.entity.LinkLocaleStatsDO;
-import org.example.shortlink.project.dao.entity.ShortLinkDO;
-import org.example.shortlink.project.dao.entity.ShortLinkGotoDO;
-import org.example.shortlink.project.dao.mapper.LinkAccessStatsMapper;
-import org.example.shortlink.project.dao.mapper.LinkLocaleStatsMapper;
-import org.example.shortlink.project.dao.mapper.ShortLinkGotoMapper;
-import org.example.shortlink.project.dao.mapper.ShortLinkMapper;
+import org.example.shortlink.project.dao.entity.*;
+import org.example.shortlink.project.dao.mapper.*;
 import org.example.shortlink.project.dto.req.ShortLinkCreateReqDTO;
 import org.example.shortlink.project.dto.req.ShortLinkUpdateReqDTO;
 import org.example.shortlink.project.dto.resq.ShortLinkGroupCountQueryResqDTO;
@@ -86,6 +80,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
     private final RedissonClient redissonClient;
     private final ServletRequest httpServletRequest;
     private final LinkLocaleStatsMapper linkLocaleStatsMapper;
+    private final LinkOsStatsMapper linkOsStatsMapper;
 
     @Value("${short-link.stats.locale.amap-key}")
     private String statsLocaleamapkey;
@@ -298,7 +293,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
     private void shortLinkStats(String fullShortUri,String gid, ServletRequest request, ServletResponse response){
         AtomicBoolean uvFirstFlag = new AtomicBoolean();
         Cookie[] cookies = ((HttpServletRequest) request).getCookies();
-        //try {
+        try {
             Runnable addResponseCookieTask = ()->{
                 String uv = UUID.fastUUID().toString();
                 Cookie uvCookie = new Cookie("uv", uv);
@@ -365,11 +360,20 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                         .date(new Date())
                         .build();
                 linkLocaleStatsMapper.shortLinkLocaleState(linkLocaleStatsDO);
+                LinkOsStatsDO linkOsStatsDO = LinkOsStatsDO.builder()
+                        .os(LinkUtil.getOs((HttpServletRequest) request))
+                        .cnt(1)
+                        .gid(gid)
+                        .fullShortUrl(fullShortUri)
+                        .date(new Date())
+                        .build();
+                linkOsStatsMapper.shortLinkOsState(linkOsStatsDO);
+
             }
-        //} catch (Exception e) {
-          //  log.info("监控短链接出错");
-           // System.out.println(e.getMessage());
-        //}
+        } catch (Exception e) {
+            log.info("监控短链接出错");
+            System.out.println(e.getMessage());
+        }
 
     }
 
