@@ -12,10 +12,7 @@ import org.example.shortlink.project.common.constant.RedisKeyConstant;
 import org.example.shortlink.project.dao.entity.ShortLinkDO;
 import org.example.shortlink.project.dao.mapper.ShortLinkGotoMapper;
 import org.example.shortlink.project.dao.mapper.ShortLinkMapper;
-import org.example.shortlink.project.dto.req.RecycleBinRecoverReqDTO;
-import org.example.shortlink.project.dto.req.RecycleBinSaveReqDTO;
-import org.example.shortlink.project.dto.req.ShortLinkPageReqDTO;
-import org.example.shortlink.project.dto.req.ShortLinkRecycleBinPageReqDTO;
+import org.example.shortlink.project.dto.req.*;
 import org.example.shortlink.project.dto.resq.ShortLinkPageResqDTO;
 import org.example.shortlink.project.service.RecycleBinService;
 import org.example.shortlink.project.toolkit.LinkUtil;
@@ -85,7 +82,6 @@ public class RecycleBinServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLin
      */
     @Override
     public void recoverRecycleBin(RecycleBinRecoverReqDTO requestParam) {
-        System.out.println("移除");
         LambdaUpdateWrapper<ShortLinkDO> eq = Wrappers.lambdaUpdate(ShortLinkDO.class)
                 .eq(ShortLinkDO::getFullShortUrl, requestParam.getFullShortUrl())
                 .eq(ShortLinkDO::getGid, requestParam.getGid())
@@ -96,5 +92,20 @@ public class RecycleBinServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLin
                 .build();
         baseMapper.update(build, eq);
         stringRedisTemplate.delete(String.format(RedisKeyConstant.GOTO_IS_NULL_SHORT_LINK_KEY, requestParam.getFullShortUrl()));
+    }
+
+    @Override
+    public void removreRecycleBin(RecycleBinRemoveReqDTO requestParam) {
+        LambdaUpdateWrapper<ShortLinkDO> eq = Wrappers.lambdaUpdate(ShortLinkDO.class)
+                .eq(ShortLinkDO::getFullShortUrl, requestParam.getFullShortUrl())
+                .eq(ShortLinkDO::getGid, requestParam.getGid())
+                .eq(ShortLinkDO::getEnableStatus, 1)
+                .eq(ShortLinkDO::getDelFlag, 0);
+        ShortLinkDO build = ShortLinkDO.builder()
+                .delFlag(1)
+                .build();
+        baseMapper.update(build, eq);
+        stringRedisTemplate.delete(String.format(RedisKeyConstant.GOTO_IS_NULL_SHORT_LINK_KEY, requestParam.getFullShortUrl()));
+
     }
 }

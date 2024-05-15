@@ -94,4 +94,9 @@ public class ShortLinkDO extends BaseDO {
      */
     private String favicon;
 
+    /**
+     * 有效期类型
+     */
+    private Integer delFlag;
+
 }

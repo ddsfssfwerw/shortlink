@@ -5,10 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.shortlink.project.common.convention.result.Result;
 import org.example.shortlink.project.common.convention.result.Results;
-import org.example.shortlink.project.dto.req.RecycleBinRecoverReqDTO;
-import org.example.shortlink.project.dto.req.RecycleBinSaveReqDTO;
-import org.example.shortlink.project.dto.req.ShortLinkPageReqDTO;
-import org.example.shortlink.project.dto.req.ShortLinkRecycleBinPageReqDTO;
+import org.example.shortlink.project.dto.req.*;
 import org.example.shortlink.project.dto.resq.ShortLinkPageResqDTO;
 import org.example.shortlink.project.service.RecycleBinService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,8 +55,20 @@ public class RecycleBinController {
      */
     @PostMapping("/api/short-link/v1/recycle-bin/recover")
     public Result<Void> recoverRecycleBin(@RequestBody RecycleBinRecoverReqDTO requestParam){
-        log.info("移除回收站：{}", requestParam.getFullShortUrl());
+        log.info("移出回收站：{}", requestParam.getFullShortUrl());
         recycleBinService.recoverRecycleBin(requestParam);
+        return Results.success();
+    }
+
+    /**
+     * 彻底删除短链接
+     * @param requestParam
+     * @return
+     */
+    @PostMapping("/api/short-link/v1/recycle-bin/remove")
+    public Result<Void> removreRecycleBin(@RequestBody RecycleBinRemoveReqDTO requestParam){
+        log.info("彻底删除短链接：{}", requestParam.getFullShortUrl());
+        recycleBinService.removreRecycleBin(requestParam);
         return Results.success();
     }
 }
