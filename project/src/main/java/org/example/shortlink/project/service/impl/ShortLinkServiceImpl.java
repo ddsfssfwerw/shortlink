@@ -368,6 +368,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                         .build();
                 linkLocaleStatsMapper.shortLinkLocaleState(linkLocaleStatsDO);
 
+                //os
                 String os = LinkUtil.getOs((HttpServletRequest) request);
                 LinkOsStatsDO linkOsStatsDO = LinkOsStatsDO.builder()
                         .os(os)
@@ -410,10 +411,21 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                         .build();
                 linkDeviceStatsMapper.shortLinkDeviceState(linkDeviceStatsDO);
 
+                //网络信息
+                String network = LinkUtil.getNetwork(((HttpServletRequest) request));
+                LinkNetworkStatsDO linkNetworkStats = LinkNetworkStatsDO.builder()
+                        .network(network)
+                        .cnt(1)
+                        .gid(gid)
+                        .fullShortUrl(fullShortUri)
+                        .date(new Date())
+                        .build();
+                linkNetworkStatsMapper.shortLinkNetworkState(linkNetworkStats);
+
             }
         } catch (Exception e) {
             log.info("监控短链接出错");
-            System.out.println(e.getMessage());
+            //System.out.println(e.getMessage());
         }
 
     }

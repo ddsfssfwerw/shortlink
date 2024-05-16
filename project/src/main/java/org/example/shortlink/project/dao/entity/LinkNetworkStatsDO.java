@@ -43,6 +43,11 @@ public class LinkNetworkStatsDO extends BaseDO {
     private Long id;
 
     /**
+     * gid
+     */
+    private String gid;
+
+    /**
      * 完整短链接
      */
     private String fullShortUrl;
