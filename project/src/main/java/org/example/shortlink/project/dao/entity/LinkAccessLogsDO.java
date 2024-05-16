@@ -45,6 +45,11 @@ public class LinkAccessLogsDO extends BaseDO {
      */
     private String fullShortUrl;
 
+
+    /**
+     * gid
+     */
+    private String gid;
     /**
      * 用户信息
      */

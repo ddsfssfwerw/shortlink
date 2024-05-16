@@ -41,6 +41,10 @@ public class LinkDeviceStatsDO extends BaseDO {
      * id
      */
     private Long id;
+    /**
+     * gid
+     */
+    private String gid;
 
     /**
      * 完整短链接
