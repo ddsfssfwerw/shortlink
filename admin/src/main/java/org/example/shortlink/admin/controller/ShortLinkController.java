@@ -5,15 +5,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.shortlink.admin.common.convention.result.Result;
 import org.example.shortlink.admin.common.convention.result.Results;
-import org.example.shortlink.admin.remote.ShortLinkRemoteService;
+import org.example.shortlink.admin.remote.ShortLinkActualRemoteService;
 import org.example.shortlink.admin.remote.dto.req.ShortLinkCreateReqDTO;
 import org.example.shortlink.admin.remote.dto.req.ShortLinkPageReqDTO;
 import org.example.shortlink.admin.remote.dto.req.ShortLinkUpdateReqDTO;
 import org.example.shortlink.admin.remote.dto.resq.ShortLinkCreateResqDTO;
 import org.example.shortlink.admin.remote.dto.resq.ShortLinkPageResqDTO;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * @author LLY
@@ -26,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class ShortLinkController {
-    ShortLinkRemoteService shortLinkRemoteService = new ShortLinkRemoteService() {
+    ShortLinkActualRemoteService shortLinkActualRemoteService = new ShortLinkActualRemoteService() {
     };
 
 
@@ -37,8 +35,8 @@ public class ShortLinkController {
      */
     @PostMapping("/api/short-link/admin/v1/create")
     public Result<ShortLinkCreateResqDTO> createShortLink(@RequestBody ShortLinkCreateReqDTO shortLinkCreateReqDTO){
-        //ShortLinkCreateResqDTO shortLinkCreateResqDTO = ShortLinkRemoteService.createShortLink(shortLinkCreateReqDTO);
-        Result<ShortLinkCreateResqDTO> shortLink = ShortLinkRemoteService.createShortLink(shortLinkCreateReqDTO);
+        //ShortLinkCreateResqDTO shortLinkCreateResqDTO = ShortLinkActualRemoteService.createShortLink(shortLinkCreateReqDTO);
+        Result<ShortLinkCreateResqDTO> shortLink = ShortLinkActualRemoteService.createShortLink(shortLinkCreateReqDTO);
         log.info("创建短链接： {}", shortLink.getData().getFullShortUrl());
         return shortLink;
     }
@@ -51,7 +49,7 @@ public class ShortLinkController {
     @PostMapping("/api/short-link/admin/v1/update")
     public Result<Void> updateShortLink(@RequestBody ShortLinkUpdateReqDTO shortLinkUpdateReqDTO){
         log.info("修改短链接,gid:{},fullShortUrl:{}",shortLinkUpdateReqDTO.getGid(),shortLinkUpdateReqDTO.getFullShortUrl());
-        shortLinkRemoteService.updateShortLink(shortLinkUpdateReqDTO);
+        shortLinkActualRemoteService.updateShortLink(shortLinkUpdateReqDTO);
         return Results.success();
 
     }
@@ -65,7 +63,7 @@ public class ShortLinkController {
     @GetMapping("/api/short-link/admin/v1/page")
     public Result<IPage<ShortLinkPageResqDTO>> pageShortLink(ShortLinkPageReqDTO shortLinkPageReqDTO){
         log.info("分页查询短链接：");
-        return shortLinkRemoteService.pageShortLink(shortLinkPageReqDTO);
+        return shortLinkActualRemoteService.pageShortLink(shortLinkPageReqDTO);
 
     }
 

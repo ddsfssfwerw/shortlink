@@ -8,15 +8,12 @@ import org.example.shortlink.admin.common.convention.result.Result;
 import org.example.shortlink.admin.dto.req.RecycleBinRecoverReqDTO;
 import org.example.shortlink.admin.dto.req.RecycleBinRemoveReqDTO;
 import org.example.shortlink.admin.dto.req.RecycleBinSaveReqDTO;
-import org.example.shortlink.admin.remote.dto.req.ShortLinkCreateReqDTO;
-import org.example.shortlink.admin.remote.dto.req.ShortLinkPageReqDTO;
-import org.example.shortlink.admin.remote.dto.req.ShortLinkRecycleBinPageReqDTO;
-import org.example.shortlink.admin.remote.dto.req.ShortLinkUpdateReqDTO;
+import org.example.shortlink.admin.remote.dto.req.*;
 import org.example.shortlink.admin.remote.dto.resq.ShortLinkCreateResqDTO;
 import org.example.shortlink.admin.remote.dto.resq.ShortLinkGroupCountQueryResqDTO;
 import org.example.shortlink.admin.remote.dto.resq.ShortLinkPageResqDTO;
+import org.example.shortlink.admin.remote.dto.resq.ShortLinkStatsRespDTO;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,10 +23,10 @@ import java.util.Map;
  * @author LLY
  * @version v1.0.0
  * @date 2024/5/11 上午10:10
- * @className ShortLinkRemoteService
+ * @className ShortLinkActualRemoteService
  * @copyright LLY
  */
-public interface ShortLinkRemoteService {
+public interface ShortLinkActualRemoteService {
     /**
      * 创建
      * @param shortLinkCreateReqDTO
@@ -137,5 +134,23 @@ public interface ShortLinkRemoteService {
     default void removreRecycleBin(RecycleBinRemoveReqDTO requestParam){
         HttpUtil.post("http://127.0.0.1:8001/api/short-link/v1/recycle-bin/remove", JSON.toJSONString(requestParam));
 
+    }
+
+
+    default Result<ShortLinkStatsRespDTO> oneShortLinkStats(ShortLinkStatsReqDTO requestParam){
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        resultMap.put("gid", requestParam.getGid());
+        resultMap.put("fullShortUrl", requestParam.getFullShortUrl());
+        resultMap.put("startDate", requestParam.getStartDate());
+        resultMap.put("endDate", requestParam.getEndDate());
+        resultMap.put("enableStatus", requestParam.getEnableStatus());
+        String s = HttpUtil.get("http://127.0.0.1:8001/api/short-link/v1/stats", resultMap);
+        //JSON.parseObject(s,ShortLinkPageResqDTO.class);
+        return JSON.parseObject(s, new TypeReference<Result<ShortLinkStatsRespDTO>>() {
+            @Override
+            public Result<ShortLinkStatsRespDTO> parseObject(String text) {
+                return super.parseObject(text);
+            }
+        });
     }
 }

@@ -15,34 +15,43 @@
  * limitations under the License.
  */
 
-package org.example.shortlink.project.dto.resq;
+package org.example.shortlink.admin.remote.dto.resq;
 
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 短链接操作系统监控响应参数
+ * 短链接基础信息响应参数
+ * 公众号：马丁玩编程，回复：加群，添加马哥微信（备注：link）获取项目资料
  */
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class ShortLinkStatsOsRespDTO {
+@NoArgsConstructor
+public class ShortLinkBaseInfoRespDTO {
 
     /**
-     * 统计
+     * 描述信息
      */
-    private Integer cnt;
+    @ExcelProperty("标题")
+    @ColumnWidth(40)
+    private String describe;
 
     /**
-     * 操作系统
+     * 短链接
      */
-    private String os;
+    @ExcelProperty("短链接")
+    @ColumnWidth(40)
+    private String fullShortUrl;
 
     /**
-     * 占比
+     * 原始链接
      */
-    private Double ratio;
+    @ExcelProperty("原始链接")
+    @ColumnWidth(80)
+    private String originUrl;
 }

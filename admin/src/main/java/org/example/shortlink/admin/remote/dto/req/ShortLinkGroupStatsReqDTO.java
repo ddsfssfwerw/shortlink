@@ -15,34 +15,29 @@
  * limitations under the License.
  */
 
-package org.example.shortlink.project.dto.resq;
+package org.example.shortlink.admin.remote.dto.req;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
- * 短链接操作系统监控响应参数
+ * 分组短链接监控请求参数
+ * 公众号：马丁玩编程，回复：加群，添加马哥微信（备注：link）获取项目资料
  */
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class ShortLinkStatsOsRespDTO {
+public class ShortLinkGroupStatsReqDTO {
 
     /**
-     * 统计
+     * 分组标识
      */
-    private Integer cnt;
+    private String gid;
 
     /**
-     * 操作系统
+     * 开始日期
      */
-    private String os;
+    private String startDate;
 
     /**
-     * 占比
+     * 结束日期
      */
-    private Double ratio;
+    private String endDate;
 }

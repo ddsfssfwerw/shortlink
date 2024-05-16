@@ -17,11 +17,11 @@
 
 package org.example.shortlink.project.dto.req;
 
+
 import lombok.Data;
 
 /**
  * 短链接监控请求参数
- * 公众号：马丁玩编程，回复：加群，添加马哥微信（备注：link）获取项目资料
  */
 @Data
 public class ShortLinkStatsReqDTO {
@@ -45,9 +45,5 @@ public class ShortLinkStatsReqDTO {
      * 结束日期
      */
     private String endDate;
-
-    /**
-     * 启用标识 0：启用 1：未启用
-     */
-    private Integer enableStatus;
 }
+

@@ -15,34 +15,38 @@
  * limitations under the License.
  */
 
-package org.example.shortlink.project.dto.resq;
+package org.example.shortlink.admin.remote.dto.resq;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import java.util.Date;
 
 /**
- * 短链接操作系统监控响应参数
+ * 短链接基础访问监控响应参数
+ * 公众号：马丁玩编程，回复：加群，添加马哥微信（备注：link）获取项目资料
  */
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class ShortLinkStatsOsRespDTO {
+public class ShortLinkStatsAccessDailyRespDTO {
 
     /**
-     * 统计
+     * 日期
      */
-    private Integer cnt;
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    private Date date;
 
     /**
-     * 操作系统
+     * 访问量
      */
-    private String os;
+    private Integer pv;
 
     /**
-     * 占比
+     * 独立访客数
      */
-    private Double ratio;
+    private Integer uv;
+
+    /**
+     * 独立IP数
+     */
+    private Integer uip;
 }

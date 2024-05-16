@@ -11,11 +11,10 @@ import org.example.shortlink.admin.common.biz.user.UserContext;
 import org.example.shortlink.admin.common.convention.result.Result;
 import org.example.shortlink.admin.dao.entity.GroupDO;
 import org.example.shortlink.admin.dao.mapper.GroupMapper;
-import org.example.shortlink.admin.dto.req.ShortLinkGroupSaveReqDTO;
 import org.example.shortlink.admin.dto.req.ShortLinkGroupSortReqDTO;
 import org.example.shortlink.admin.dto.req.ShortLinkGroupUpdateReqDTO;
 import org.example.shortlink.admin.dto.resq.ShortLinkGroupResqDTO;
-import org.example.shortlink.admin.remote.ShortLinkRemoteService;
+import org.example.shortlink.admin.remote.ShortLinkActualRemoteService;
 import org.example.shortlink.admin.remote.dto.resq.ShortLinkGroupCountQueryResqDTO;
 import org.example.shortlink.admin.service.GroupServise;
 import org.example.shortlink.admin.toolkit.RandomStringUtil;
@@ -34,7 +33,7 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor//注入bean
 public class GroupServiseImpl extends ServiceImpl<GroupMapper, GroupDO> implements GroupServise {
-    ShortLinkRemoteService shortLinkRemoteService = new ShortLinkRemoteService() {
+    ShortLinkActualRemoteService shortLinkActualRemoteService = new ShortLinkActualRemoteService() {
     };
 
 
@@ -98,7 +97,7 @@ public class GroupServiseImpl extends ServiceImpl<GroupMapper, GroupDO> implemen
                 .eq(GroupDO::getUsername, UserContext.getUsername())
                 .orderByDesc(GroupDO::getSortOrder,GroupDO::getUpdateTime);
         List<GroupDO> groupDOList = baseMapper.selectList(eq);
-        Result<List<ShortLinkGroupCountQueryResqDTO>> listResult = shortLinkRemoteService
+        Result<List<ShortLinkGroupCountQueryResqDTO>> listResult = shortLinkActualRemoteService
                 .listGroupShortLinkCount(groupDOList.stream().map(GroupDO::getGid).toList());
         List<ShortLinkGroupResqDTO> list = BeanUtil.copyToList(groupDOList, ShortLinkGroupResqDTO.class);
         list.forEach(each -> {
