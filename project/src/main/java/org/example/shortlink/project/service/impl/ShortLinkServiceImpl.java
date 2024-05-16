@@ -412,15 +412,14 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                 linkDeviceStatsMapper.shortLinkDeviceState(linkDeviceStatsDO);
 
                 //网络信息
-                String network = LinkUtil.getNetwork(((HttpServletRequest) request));
-                LinkNetworkStatsDO linkNetworkStats = LinkNetworkStatsDO.builder()
-                        .network(network)
+                LinkNetworkStatsDO linkNetworkStatsDO = LinkNetworkStatsDO.builder()
+                        .network(LinkUtil.getNetwork(((HttpServletRequest) request)))
                         .cnt(1)
                         .gid(gid)
                         .fullShortUrl(fullShortUri)
                         .date(new Date())
                         .build();
-                linkNetworkStatsMapper.shortLinkNetworkState(linkNetworkStats);
+                linkNetworkStatsMapper.shortLinkNetworkState(linkNetworkStatsDO);
 
             }
         } catch (Exception e) {
